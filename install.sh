@@ -1,10 +1,10 @@
 #!/bin/bash
 
-# Locate the anchrcrypt.py file
-ANCHRCRYPT_PATH=$(find ~ -type f -name "anchrcrypt.py" 2>/dev/null | head -n 1)
+# Look for anchrcrypt.py in the current directory
+ANCHRCRYPT_PATH="./anchrcrypt.py"
 
-if [ -z "$ANCHRCRYPT_PATH" ]; then
-    echo "Error: anchrcrypt.py not found. Please ensure it's downloaded."
+if [ ! -f "$ANCHRCRYPT_PATH" ]; then
+    echo "Error: anchrcrypt.py not found in the current directory. Please ensure it's here."
     exit 1
 fi
 
@@ -17,7 +17,7 @@ DEST_DIR="/usr/local/bin"
 # Create a wrapper script to run the Python file as a command
 WRAPPER="$DEST_DIR/anchrcrypt"
 echo "#!/bin/bash" > "$WRAPPER"
-echo "python3 $ANCHRCRYPT_PATH \"\$@\"" >> "$WRAPPER"
+echo "python3 $(realpath $ANCHRCRYPT_PATH) \"\$@\"" >> "$WRAPPER"
 chmod +x "$WRAPPER"
 
 # Check if $DEST_DIR is in the PATH and add it if necessary
